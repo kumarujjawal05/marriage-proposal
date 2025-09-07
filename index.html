@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Deepak • Wedding-Portfolio</title>
+  <script>
+    (function() {
+      var isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      var vw = window.innerWidth || document.documentElement.clientWidth || screen.width;
+      var isNarrow = Math.min(screen.width || vw, vw) <= 820; // tablets/phones
+      var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+      if ((isMobileUA || (isNarrow && isTouch)) && !/mobile\.html$/i.test(location.pathname)) {
+        location.replace('./mobile.html' + location.search + location.hash);
+      }
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
