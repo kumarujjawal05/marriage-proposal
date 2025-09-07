@@ -215,9 +215,11 @@ function footer() {
   return el('div', { class: 'footer' }, `© ${year} Deepak Parashar · Marriage Biodata`);
 }
 
+const isAndroid = /android/i.test(navigator.userAgent);
 function confettiBurst(anchorEl) {
   // Create layer once
   let layer = document.getElementById('confetti-layer');
+  let count = isAndroid ? 14:24;
   if (!layer) {
     layer = el('div', { id: 'confetti-layer' });
     document.body.appendChild(layer);
@@ -323,6 +325,17 @@ function lightbox() {
       el('button', { class: 'lightbox-close', onClick: closeLightbox, 'aria-label': 'Close' }, '×')
     )
   );
+
+  // Add Android touch-swipe
+  let touchStartX = 0;
+  overlay.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+  overlay.addEventListener('touchend', e => {
+    let dx = e.changedTouches[0].screenX - touchStartX;
+    if (dx > 60) prevImage();   // swipe right
+    if (dx < -60) nextImage(); // swipe left
+  });
   document.body.appendChild(overlay);
 }
 
