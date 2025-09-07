@@ -2,7 +2,7 @@ const root = document.documentElement;
 const app = document.getElementById('app');
 
 const CONTACT_EMAIL = (window.CONTACT_EMAIL && typeof window.CONTACT_EMAIL === 'string')
-  ? window.CONTACT_EMAIL
+  ? window.CONTACT
   : 'deepak.parashar@example.com';
 
 // Shared biodata used for screen and print
@@ -16,7 +16,7 @@ const BIODATA = {
   sibling: 'Ujjawal Kumar (Software Engineer, Deloitte)',
   address: 'Parashar Bhawan, Vill + Post: Sisai, P.S: Goreyakothi, Dist: Siwan, State: Bihar, Pincode: 841506',
   dob: '11 October 1994',
-  phone: '+91 98765 43210',
+  phone: '+91 9650769277',
 };
 
 const GALLERY_IMAGES = [
@@ -97,8 +97,7 @@ function aboutSection() {
 I enjoy spending time with loved ones and upholding our traditions, as I believe they form the foundation of a strong and harmonious life. I aspire to build a home filled with warmth, respect, and joy, where both families feel equally valued and cherished. With the blessings of elders and the support of a life partner, I look forward to creating a journey rooted in love, trust, and cultural values.`),
         el('div', { class: 'facts-mini' },
           el('div', { class: 'mini-row' }, el('span', { class: 'mini-label' }, 'Date of Birth: '), `${BIODATA.dob}`),
-          el('div', { class: 'mini-row' }, el('span', { class: 'mini-label' }, 'Phone: '), `${BIODATA.phone}`),
-          el('div', { class: 'mini-row' }, el('span', { class: 'mini-label' }, 'Email: '), `${CONTACT_EMAIL}`),
+          el('div', { class: 'mini-row' }, el('span', { class: 'mini-label' }, 'Phone: '), `${BIODATA.phone}`)
         )
       ),
       el('div', {},
@@ -111,17 +110,35 @@ I enjoy spending time with loved ones and upholding our traditions, as I believe
 function statsSection() {
   // Simple details cards with flip on hover
   const cards = el('div', { class: 'grid' },
-    el('div', { class: 'card stat-card', 'data-back': 'Date of Birth' },
-      el('h4', {}, 'Date of Birth'),
-      el('p', { class: 'p' }, BIODATA.dob)
+    // Date of Birth card
+    el('div', { class: 'card stat-card flip-card' },
+      el('div', { class: 'flip-inner' },
+        el('div', { class: 'flip-front' },
+          el('h4', {}, 'Date of Birth'),
+          el('p', { class: 'p' }, BIODATA.dob)
+        ),
+        el('div', { class: 'flip-back' }, 'Date of Birth')
+      )
     ),
-    el('div', { class: 'card stat-card', 'data-back': 'Location' },
-      el('h4', {}, 'Location'),
-      el('p', { class: 'p' }, BIODATA.place)
+    // Location card
+    el('div', { class: 'card stat-card flip-card' },
+      el('div', { class: 'flip-inner' },
+        el('div', { class: 'flip-front' },
+          el('h4', {}, 'Location'),
+          el('p', { class: 'p' }, BIODATA.place)
+        ),
+        el('div', { class: 'flip-back' }, 'Location')
+      )
     ),
-    el('div', { class: 'card stat-card', 'data-back': 'Contact Number' },
-      el('h4', {}, 'Contact Number'),
-      el('p', { class: 'p' }, BIODATA.phone)
+    // Contact Number card
+    el('div', { class: 'card stat-card flip-card' },
+      el('div', { class: 'flip-inner' },
+        el('div', { class: 'flip-front' },
+          el('h4', {}, 'Contact Number'),
+          el('p', { class: 'p' }, BIODATA.phone)
+        ),
+        el('div', { class: 'flip-back' }, 'Contact Number')
+      )
     )
   );
 
@@ -148,10 +165,17 @@ function familySection() {
       el('h3', {}, 'My Family')
     ),
     el('div', { class: 'grid family-grid' },
-      ...members.map((m, i) => el('div', { class: `card family-card reveal ${variants[i % variants.length]}` , style: `--d:${i * 120}ms`, 'data-back': m.title },
-        el('h4', {}, m.title),
-        el('p', { class: 'p' }, m.desc)
-      ))
+      ...members.map((m, i) =>
+        el('div', { class: `card family-card flip-card reveal ${variants[i % variants.length]}`, style: `--d:${i * 120}ms` },
+          el('div', { class: 'flip-inner' },
+            el('div', { class: 'flip-front' },
+              el('h4', {}, m.title),
+              el('p', { class: m.title === 'Address' ? 'p no-clamp' : 'p' }, m.desc)
+            ),
+            el('div', { class: 'flip-back' }, m.title)
+          )
+        )
+      )
     ),
     waveDivider()
   );
@@ -271,7 +295,6 @@ function printOnlySection() {
     el('p', {}, `Place: ${BIODATA.place}`),
     el('p', {}, `Date of Birth: ${BIODATA.dob}`),
     el('p', {}, `Contact Number: ${BIODATA.phone}`),
-    el('p', {}, `Contact Email: ${CONTACT_EMAIL}`),
     el('p', {}, `Address: ${BIODATA.address}`),
     el('p', {}, `Father: ${BIODATA.father}`),
     el('p', {}, `Mother: ${BIODATA.mother}`),

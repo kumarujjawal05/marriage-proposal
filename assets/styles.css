@@ -46,7 +46,7 @@ body {
 
 .section { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px; box-shadow: var(--shadow); }
 .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.card { border: 1px solid var(--border); border-radius: 16px; padding: 16px; background: var(--bg-elev); transition: transform .25s ease; }
+.card { border: 1px solid var(--border); border-radius: 16px; padding: 16px; background: var(--bg-elev); transition: transform .25s ease; overflow: hidden; }
 .card:hover { transform: translateY(-2px); }
 .badge { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); background: #fff3f7; border: 1px dashed var(--border); padding: 6px 10px; border-radius: 999px; }
 .p { color: var(--muted); margin: 0 0 12px; }
@@ -79,6 +79,12 @@ body {
 
 /* Stats cards only (progress bars removed) */
 .stat-card h4 { margin: 0 0 6px; }
+.stat-card .p { margin-bottom: 0; }
+/* Equal heights for details cards */
+#stats .card { min-height: 170px; display: grid; }
+#stats .flip-inner { min-height: 170px; }
+#stats .flip-front { display: grid; place-items: center; padding: 16px; text-align: center; }
+#stats .flip-back { text-align: center; }
 
 /* Flower shower overlay */
 #flower-layer { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
@@ -106,11 +112,39 @@ body {
 /* 3D perspective for any grid of cards */
 .grid { perspective: 1000px; }
 
-/* Generic flip for any card that has a data-back attribute */
-.card[data-back] { position: relative; transform-style: preserve-3d; transition: transform .6s ease, box-shadow .3s ease; }
-.card[data-back]:hover { transform: rotateY(180deg) scale(1.03); box-shadow: 0 14px 36px rgba(224,97,127,0.18); }
-.card[data-back] > * { backface-visibility: hidden; }
-.card[data-back]::after { content: attr(data-back); position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(135deg, #ffd6e0, #ffe8f0); color: #4a2c2a; border-radius: 12px; border: 1px solid var(--border); transform: rotateY(180deg); backface-visibility: hidden; font-weight: 700; letter-spacing: .3px; }
+/* Flip-card implementation using inner wrapper (more robust than pseudo-elements) */
+.flip-card { perspective: 1000px; }
+.flip-card.card:hover { transform: none !important; } /* disable generic card hover translate */
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 150px; /* consistent height baseline */
+  transform-style: preserve-3d;
+  transition: transform .6s ease;
+  will-change: transform;
+}
+.flip-card:hover .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-front, .flip-back {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-front { transform: rotateY(0); }
+.flip-back {
+  transform: rotateY(180deg);
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, #ffd6e0, #ffe8f0);
+  color: #4a2c2a;
+  font-weight: 700;
+  letter-spacing: .3px;
+  border: 1px solid var(--border);
+  pointer-events: none;
+}
 
 /* Family grid layout remains */
 .family-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
@@ -190,6 +224,16 @@ body {
 .family-card.revealed.anim-flip { animation: cardFlip .7s ease forwards; animation-delay: var(--d, 0ms); }
 .family-card.revealed.anim-zoom { animation: cardZoom .7s ease forwards; animation-delay: var(--d, 0ms); }
 .family-card.revealed.anim-slide { animation: cardSlide .7s ease forwards; animation-delay: var(--d, 0ms); }
+
+/* Equal heights for family cards */
+#family .card { min-height: 180px; display: grid; }
+#family .flip-inner { min-height: 180px; }
+#family .flip-front { display: grid; align-content: center; justify-items: center; gap: 6px; padding: 16px; text-align: center; }
+#family .flip-back { text-align: center; }
+/* Clamp long text inside cards to avoid overflow */
+.card .p { display: -webkit-box; -webkit-line-clamp: 5; line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+/* Allow full multi-line address text */
+.card .p.no-clamp { display: block; -webkit-line-clamp: initial; line-clamp: unset; -webkit-box-orient: initial; overflow: visible; white-space: normal; }
 
 @keyframes cardRise { to { opacity: 1; transform: none; } }
 @keyframes cardFlip { 0% { opacity: .0; transform: rotateX(12deg) translateY(6px); } 100% { opacity: 1; transform: none; } }
