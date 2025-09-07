@@ -30,7 +30,7 @@ body {
 .header > .logo { justify-self: start; display: inline-flex; align-items: center; gap: 10px; font-weight: 800; }
 .header > .header-center-img { justify-self: center; width: 110px; height: 110px; object-fit: contain; }
 .header > div:last-child { justify-self: end; }
-.btn { padding: 11px 16px; border-radius: 999px; border: 1px solid var(--border); cursor: pointer; font-weight: 700; }
+.btn { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--border); cursor: pointer; font-weight: 700; }
 .btn.primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #4a2c2a; border: none; }
 
 /* Hero */
